@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <button id="on">ON</button>
+    <button id="off">OFF</button>
+  </body>
+  <script>
+
+(function() {
+  var httpRequest;
+  document.getElementById("on").onclick = function() { makeRequest('/on'); };
+  document.getElementById("off").onclick = function() { makeRequest('/off'); };
+
+  function makeRequest(url) {
+    httpRequest = new XMLHttpRequest();
+
+    httpRequest.onreadystatechange = function alertContents() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        	response = JSON.parse(httpRequest.responseText);
+
+        	if(!response.success) {
+        		alert(response.message);
+        	}
+      } else {
+        alert('There was a problem with the request.');
+      }
+    }
+  };
+    httpRequest.open('GET', url);
+    httpRequest.send();
+  }
+})();
+
+  </script>
+</html>
